@@ -20,13 +20,19 @@ int main()
 		return -1;
 	}
 		
-	iResult = ga_insert(&gaPool, "11111111", CHRO_LEN);
+	iResult = ga_insert(&gaPool, "10001100", CHRO_LEN);
 	if(iResult != 0)
 	{
 		printf("ga_insert() failed!\n");
 		return -1;
 	}
-		
+
+	iResult = ga_insert(&gaPool, "10110010", CHRO_LEN);
+	if(iResult != 0)
+	{
+		printf("ga_insert() failed!\n");
+		return -1;
+	}
 
 	iResult = ga_insert(&gaPool, "00000000", CHRO_LEN);
 	if(iResult != 0)
@@ -34,18 +40,24 @@ int main()
 		printf("ga_insert() failed!\n");
 		return -1;
 	}
-		
-	iResult = ga_insert(&gaPool, "01010101", CHRO_LEN);
-	if(iResult != 0)
-	{
-		printf("ga_insert() failed!\n");
-		return -1;
-	}
-	
-	printf("order!\n");
 	
 	ga_order(&gaPool, fitness);
 	
+	for(i = 0; i < gaPool.poolSize; i++)
+	{
+		ga_print_chro(&gaPool, i);
+		printf(", fitness = %lf\n", fitness(gaPool.pool[i], gaPool.chroLen));
+	}
+
+	iResult = ga_crossover(&gaPool, 0, 1, 4);
+	if(iResult != 0)
+	{
+		printf("ga_crossover() failed\n");
+		return -1;
+	}
+	
+	printf("\n");
+	printf("After crossover:\n");
 	for(i = 0; i < gaPool.poolSize; i++)
 	{
 		ga_print_chro(&gaPool, i);

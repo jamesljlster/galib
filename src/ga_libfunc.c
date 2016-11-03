@@ -1,7 +1,93 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 #include "galib.h"
+
+void ga_copy(char* dst, char* src, int startIndex, int size);
+
+int ga_crossover(struct GA_POOL* gaPoolPtr, int chroIndex1, int chroIndex2, int cut)
+{
+	int i, j, k;
+	int retValue = 0;
+
+	char* parent[2];
+	char* cross[4];
+
+	void* allocTmp = NULL;
+
+	// Zero memory
+	memset((void*)cross, 0, sizeof(char*) * 4);
+
+	// Set parent
+	parent[0] = gaPoolPtr->pool[chroIndex1];
+	parent[1] = gaPoolPtr->pool[chroIndex2];
+	
+	// Memory allocation
+	for(i = 0; i < 4; i++)
+	{
+		cross[i] = (char*)malloc(sizeof(char) * gaPoolPtr->chroLen);
+		if(cross[i] == NULL)
+		{
+			retValue = -1;
+			goto RET;
+		}
+	}
+
+	allocTmp = realloc(gaPoolPtr->pool, sizeof(char*) * (gaPoolPtr->poolSize + 4));
+	if(allocTmp == NULL)
+	{
+		retValue = -1;
+		goto RET;
+	}
+	else
+	{
+		gaPoolPtr->poolSize += 4;
+		gaPoolPtr->pool = (char**)allocTmp;
+		allocTmp = NULL;
+	}
+
+	// Crossover
+	k = 0;
+	for(i = 0; i < 2; i++)
+	{
+		for(j = 0; j < 2; j++)
+		{
+			ga_copy(cross[k], parent[i], 0, cut + 1);
+			ga_copy(cross[k], parent[j], cut + 1, gaPoolPtr->chroLen - cut - 1);
+			k++;
+		}
+	}
+
+	// Assign child
+	for(i = 0; i < 4; i++)
+	{
+		gaPoolPtr->pool[gaPoolPtr->poolSize - 1 - i] = cross[i];
+		cross[i] = NULL;
+	}
+
+RET:
+	for(i = 0; i < 4; i++)
+	{
+		if(cross[i] != NULL)
+			free(cross[i]);
+	}
+
+	if(allocTmp != NULL)
+		free(allocTmp);
+
+	return retValue;
+}
+
+void ga_copy(char* dst, char* src, int startIndex, int size)
+{
+	int i;
+
+	for(i = 0; i < size; i++)
+	{
+		dst[i + startIndex] = src[i + startIndex];
+	}
+}
 
 int ga_order(struct GA_POOL* gaPoolPtr, double (*fitness)(char* chro, int chroLen))
 {
