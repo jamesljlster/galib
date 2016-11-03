@@ -10,7 +10,7 @@ int ga_order(struct GA_POOL* gaPoolPtr, double (*fitness)(char* chro, int chroLe
 
 	for(i = 0; i < gaPoolPtr->poolSize - 1; i++)
 	{
-		for(j = 0; j < gaPoolPtr->poolSize - i - 1; j++)
+		for(j = 0; j < (gaPoolPtr->poolSize - 1) - i; j++)
 		{
 			if(fitness(gaPoolPtr->pool[j], gaPoolPtr->chroLen) < fitness(gaPoolPtr->pool[j + 1], gaPoolPtr->chroLen))
 			{
@@ -36,7 +36,6 @@ int ga_print_chro(struct GA_POOL* gaPoolPtr, int chroIndex)
 	{
 		printf("%c", gaPoolPtr->pool[chroIndex][i]);
 	}
-	printf("\n");
 
 	return 0;
 }
