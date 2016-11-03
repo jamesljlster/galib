@@ -25,7 +25,7 @@ int ga_mutation(struct GA_POOL* gaPoolPtr, int chroIndex, int position);
 
 int ga_print_chro(struct GA_POOL* gaPoolPtr, int chroIndex);
 
-#ifdef __cplusplud
+#ifdef __cplusplus
 }
 #endif
 
