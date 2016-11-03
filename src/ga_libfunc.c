@@ -6,9 +6,45 @@
 
 void ga_copy(char* dst, char* src, int startIndex, int size);
 
+int ga_kill_after(struct GA_POOL* gaPoolPtr, int killIndex)
+{
+	int retValue = 0;
+	void* allocTmp = NULL;
+
+	// Checking
+	if(killIndex >= gaPoolPtr->poolSize)
+	{
+		retValue = -1;
+		goto RET;
+	}
+
+	allocTmp = realloc(gaPoolPtr->pool, sizeof(char*) * (killIndex + 1));
+	if(allocTmp == NULL)
+	{
+		retValue = -1;
+		goto RET;
+	}
+	else
+	{
+		gaPoolPtr->poolSize = killIndex + 1;
+		gaPoolPtr->pool = (char**)allocTmp;
+		allocTmp = NULL;
+	}
+
+RET:
+	if(allocTmp != NULL)
+		free(allocTmp);
+
+	return retValue;
+}
+
 int ga_mutation(struct GA_POOL* gaPoolPtr, int chroIndex, int position)
 {
 	char tmp;
+
+	// Checking
+	if(chroIndex >= gaPoolPtr->poolSize || position >= gaPoolPtr->chroLen)
+		return -1;
 
 	tmp = gaPoolPtr->pool[chroIndex][position];
 	tmp = 1 - (tmp - '0') + '0';
@@ -22,6 +58,13 @@ int ga_reproduction(struct GA_POOL* gaPoolPtr, int chroIndex)
 	int retValue = 0;
 	char* tmpChro = NULL;
 	void* allocTmp = NULL;
+
+	// Checking
+	if(chroIndex >= gaPoolPtr->poolSize)
+	{
+		retValue = -1;
+		goto RET;
+	}
 	
 	// Memory allocation
 	tmpChro = (char*)malloc(sizeof(char) * gaPoolPtr->chroLen);
@@ -68,6 +111,13 @@ int ga_crossover(struct GA_POOL* gaPoolPtr, int chroIndex1, int chroIndex2, int 
 	char* cross[4];
 
 	void* allocTmp = NULL;
+
+	// Checking
+	if(chroIndex1 >= gaPoolPtr->poolSize || chroIndex2 >= gaPoolPtr->poolSize || cut >= gaPoolPtr->chroLen)
+	{
+		retValue = -1;
+		goto RET;
+	}
 
 	// Zero memory
 	memset((void*)cross, 0, sizeof(char*) * 4);
