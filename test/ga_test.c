@@ -40,6 +40,15 @@ int main()
 		printf("ga_insert() failed!\n");
 		return -1;
 	}
+
+	iResult = ga_reproduction(&gaPool, 2);
+	if(iResult != 0)
+	{
+		printf("ga_reproduction failed\n");
+		return -1;
+	}
+
+	ga_mutation(&gaPool, 2, 3);
 	
 	ga_order(&gaPool, fitness);
 	
