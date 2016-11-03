@@ -15,6 +15,19 @@ file(GLOB TEST_TXT
 
 # Set dependences
 set(PROJECT_DEPS galib)
+if(UNIX)
+	find_library(CONIO_LIB conio
+		"/usr/lib"
+		"/usr/local/lib"
+		)
+	find_path(CONIO_INCLUDE_DIR conio.h
+		"/usr/include"
+		"/usr/local/include"
+		)
+
+	set(PROJECT_DEPS ${PROJECT_DEPS} ${CONIO_LIB})
+	include_directories(${CONIO_INCLUDE_DIR})
+endif()
 
 install(FILES ${TEST_TXT}
 	DESTINATION "${CMAKE_INSTALL_PREFIX}/bin"
