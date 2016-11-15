@@ -1,7 +1,7 @@
 #ifndef _GALIB_H_
 #define _GALIB_H_
 
-typedef char GA_TYPE;
+typedef int GA_TYPE;
 
 struct GA_POOL
 {
@@ -23,7 +23,8 @@ int ga_kill_after(struct GA_POOL* gaPoolPtr, int killIndex);
 
 int ga_crossover(struct GA_POOL* gaPoolPtr, int chroIndex1, int chroIndex2, int cut);
 int ga_reproduction(struct GA_POOL* gaPoolPtr, int chroIndex);
-int ga_mutation(struct GA_POOL* gaPoolPtr, int chroIndex, int position);
+int ga_edit_chro(struct GA_POOL* gaPoolPtr, int chroIndex, int position, GA_TYPE newValue);
+//int ga_mutation(struct GA_POOL* gaPoolPtr, int chroIndex, int position);
 
 int ga_print_chro(struct GA_POOL* gaPoolPtr, int chroIndex);
 

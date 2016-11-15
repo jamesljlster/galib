@@ -38,20 +38,31 @@ RET:
 	return retValue;
 }
 
-int ga_mutation(struct GA_POOL* gaPoolPtr, int chroIndex, int position)
+int ga_edit_chro(struct GA_POOL* gaPoolPtr, int chroIndex, int position, GA_TYPE newValue)
 {
-	GA_TYPE tmp;
-
 	// Checking
 	if(chroIndex >= gaPoolPtr->poolSize || position >= gaPoolPtr->chroLen)
 		return -1;
 
-	tmp = gaPoolPtr->pool[chroIndex][position];
-	tmp = 1 - (tmp - '0') + '0';
-	gaPoolPtr->pool[chroIndex][position] = tmp;
+	gaPoolPtr->pool[chroIndex][position] = newValue;
 
 	return 0;
 }
+
+//int ga_mutation(struct GA_POOL* gaPoolPtr, int chroIndex, int position)
+//{
+//	GA_TYPE tmp;
+//
+//	// Checking
+//	if(chroIndex >= gaPoolPtr->poolSize || position >= gaPoolPtr->chroLen)
+//		return -1;
+//
+//	tmp = gaPoolPtr->pool[chroIndex][position];
+//	tmp = 1 - (tmp - '0') + '0';
+//	gaPoolPtr->pool[chroIndex][position] = tmp;
+//
+//	return 0;
+//}
 
 int ga_reproduction(struct GA_POOL* gaPoolPtr, int chroIndex)
 {
@@ -223,7 +234,7 @@ int ga_print_chro(struct GA_POOL* gaPoolPtr, int chroIndex)
 	
 	for(i = 0; i < gaPoolPtr->chroLen; i++)
 	{
-		printf("%c", gaPoolPtr->pool[chroIndex][i]);
+		printf("%d", gaPoolPtr->pool[chroIndex][i]);
 	}
 
 	return 0;
