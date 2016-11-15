@@ -16,14 +16,79 @@ extern "C" {
 #endif
 
 int ga_create(struct GA_POOL* gaPoolPtr, int chroLen);
+/**
+ *	@fn		int ga_create(struct GA_POOL* gaPoolPtr, int chroLen);
+ *	@brief	Create a GA pool.
+ *	@param	gaPoolPtr:	GA data structure pointer.
+ *	@param	chroLen:	Target chromosome length in the pool.
+ *	@return	If error, the function would return -1, else return 0;
+ */
+
 int ga_delete(struct GA_POOL* gaPoolPtr);
+/**
+ *	@fn		int ga_delete(struct GA_POOL* gaPoolPtr);
+ *	@brief	Delete GA pool.
+ *	@param	gaPoolPtr:	GA data structure pointer.
+ */
+
 int ga_insert(struct GA_POOL* gaPoolPtr, GA_TYPE* chro, int chroLen);
+/**
+ *	@fn		int ga_insert(struct GA_POOL* gaPoolPtr, GA_TYPE* chro, int chroLen);
+ *	@brief	Insert chromosome to GA pool.
+ *	@param	gaPoolPtr:	GA data structure pointer.
+ *	@param	chro:		Target chromosome.
+ *	@param	chroLen:	Target chromosome length.
+ *	@return	If function execute succeed, function would return the target chromosome index in GA pool, else return -1.
+ */
+
 int ga_order(struct GA_POOL* gaPoolPtr, double (*fitness)(GA_TYPE* chro, int chroLen));
+/**
+ *	@fn		int ga_order(struct GA_POOL* gaPoolPtr, double (*fitness)(GA_TYPE* chro, int chroLen));
+ *	@brief	Order chromosomes in GA pool with given fitness function.
+ *	@param	gaPoolPtr:	GA data structure pointer.
+ *	@param	fitness:	Fitness function.
+ *	@return	If error, the function would return -1, else return 0.
+ */
+ 
 int ga_kill_after(struct GA_POOL* gaPoolPtr, int killIndex);
+/**
+ *	@fn		int ga_kill_after(struct GA_POOL* gaPoolPtr, int killIndex);
+ *	@brief	Kill chromosomes in GA pool after given index.
+ *	@param	gaPoolPtr:	GA data structure pointer.
+ *	@param	killIndex:	Kill all chromosome in pool after this index.
+ *	@return	If error, the function would reutrn -1, else return 0.
+ */
 
 int ga_crossover(struct GA_POOL* gaPoolPtr, int chroIndex1, int chroIndex2, int cut);
+/**
+ *	@fn		int ga_crossover(struct GA_POOL* gaPoolPtr, int chroIndex1, int chroIndex2, int cut);
+ *	@brief	Processing crossover in GA pool.
+ *	@param	gaPoolPtr:	GA data structure pointer.
+ *	@param	chroIndex1:	Parent chromosome index in the pool.
+ *	@param	chroIndex2:	Parent chromosome index in the pool.
+ *	@param	cut:		Cut point on chromosomes.
+ *	@reutrn	If error, the function would return -1, else return the first child index in the pool.
+ */
+ 
 int ga_reproduction(struct GA_POOL* gaPoolPtr, int chroIndex);
+/**
+ *	@fn		int ga_reproduction(struct GA_POOL* gaPoolPtr, int chroIndex);
+ *	@brief	Processing reproduction in GA pool.
+ *	@param	gaPoolPtr:	GA data structure pointer.
+ *	@param	chroIndex:	Target chromosome index in the pool.
+ *	@return	If error, the function would return -1, else return the new reproduced chromosome index.
+ */
+
 int ga_edit_chro(struct GA_POOL* gaPoolPtr, int chroIndex, int position, GA_TYPE newValue);
+/**
+ *	@fn		int ga_edit_chro(struct GA_POOL* gaPoolPtr, int chroIndex, int position, GA_TYPE newValue);
+ *	@brief	Edit the target chromosome in the pool.
+ *	@param	gaPoolPtr:	GA data structure pointer.
+ *	@param	chroIndex:	Target chromosome index in the pool that would be edit.
+ *	@param	position:	The position index of target chromosome that would be assigned with new value.
+ *	@return	If error, the function would return -1, else return 0.
+ */
+
 //int ga_mutation(struct GA_POOL* gaPoolPtr, int chroIndex, int position);
 
 int ga_print_chro(struct GA_POOL* gaPoolPtr, int chroIndex);
