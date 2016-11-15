@@ -102,6 +102,9 @@ int ga_reproduction(struct GA_POOL* gaPoolPtr, int chroIndex)
 	ga_copy(tmpChro, gaPoolPtr->pool[chroIndex], 0, gaPoolPtr->chroLen);
 	gaPoolPtr->pool[gaPoolPtr->poolSize - 1] = tmpChro;
 	tmpChro = NULL;
+	
+	// Assign chromosome index
+	retValue = gaPoolPtr->poolSize - 1;
 
 RET:
 	if(tmpChro != NULL)
@@ -179,6 +182,9 @@ int ga_crossover(struct GA_POOL* gaPoolPtr, int chroIndex1, int chroIndex2, int 
 		gaPoolPtr->pool[gaPoolPtr->poolSize - 1 - i] = cross[i];
 		cross[i] = NULL;
 	}
+	
+	// Assign first child chromosome index
+	retValue = gaPoolPtr->poolSize - 4;
 
 RET:
 	for(i = 0; i < 4; i++)
@@ -284,7 +290,8 @@ int ga_insert(struct GA_POOL* gaPoolPtr, GA_TYPE* chro, int chroLen)
 		tmpChro = NULL;
 	}
 
-	goto RET;
+	// Assign chromosome index
+	retValue = gaPoolPtr->poolSize - 1;
 
 RET:
 	if(allocTmp != NULL)
