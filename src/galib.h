@@ -1,12 +1,14 @@
 #ifndef _GALIB_H_
 #define _GALIB_H_
 
+typedef char GA_TYPE;
+
 struct GA_POOL
 {
 	int chroLen;
 
 	int poolSize;
-	char** pool;
+	GA_TYPE** pool;
 };
 
 #ifdef __cplusplus
@@ -15,8 +17,8 @@ extern "C" {
 
 int ga_create(struct GA_POOL* gaPoolPtr, int chroLen);
 int ga_delete(struct GA_POOL* gaPoolPtr);
-int ga_insert(struct GA_POOL* gaPoolPtr, char* chro, int chroLen);
-int ga_order(struct GA_POOL* gaPoolPtr, double (*fitness)(char* chro, int chroLen));
+int ga_insert(struct GA_POOL* gaPoolPtr, GA_TYPE* chro, int chroLen);
+int ga_order(struct GA_POOL* gaPoolPtr, double (*fitness)(GA_TYPE* chro, int chroLen));
 int ga_kill_after(struct GA_POOL* gaPoolPtr, int killIndex);
 
 int ga_crossover(struct GA_POOL* gaPoolPtr, int chroIndex1, int chroIndex2, int cut);
