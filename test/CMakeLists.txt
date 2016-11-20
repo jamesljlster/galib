@@ -14,7 +14,7 @@ file(GLOB TEST_TXT
 	)
 
 # Set dependences
-set(PROJECT_DEPS galib)
+set(PROJECT_DEPS galib m)
 if(UNIX)
 	find_library(CONIO_LIB conio
 		"/usr/lib"
