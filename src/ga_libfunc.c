@@ -8,6 +8,7 @@ void ga_copy(GA_TYPE* dst, GA_TYPE* src, int startIndex, int size);
 
 int ga_kill_after(struct GA_POOL* gaPoolPtr, int killIndex)
 {
+	int i;
 	int retValue = 0;
 	void* allocTmp = NULL;
 
@@ -16,6 +17,13 @@ int ga_kill_after(struct GA_POOL* gaPoolPtr, int killIndex)
 	{
 		retValue = -1;
 		goto RET;
+	}
+
+	// Free chromosomes
+	for(i = killIndex + 1; i < gaPoolPtr->poolSize; i++)
+	{
+		if(gaPoolPtr->pool[i] != NULL)
+			free(gaPoolPtr->pool[i]);
 	}
 
 	allocTmp = realloc(gaPoolPtr->pool, sizeof(GA_TYPE*) * (killIndex + 1));
