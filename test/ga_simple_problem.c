@@ -10,34 +10,38 @@
 #define CHRO_RESERVE	20
 #define ITER_COUNT		1000
 
-double fitness(char* chro, int chroLen);
+double fitness(GA_TYPE* chro, int chroLen);
 
 int main(int argc, char* argv[])
 {
 	int i;
 	int iResult;
+	int randIndex;
+	int mutPosition;
+	int mutValue;
 	struct GA_POOL gaPool;
 	double fitLog[ITER_COUNT] = {0};
+	int chros[2][CHRO_LEN] = {0};
 	FILE* fileWrite;
 
 	srand(time(NULL));
 
 	iResult = ga_create(&gaPool, CHRO_LEN);
-	if(iResult != 0)
+	if(iResult < 0)
 	{
 		printf("ga_create() failed!\n");
 		return -1;
 	}
 		
-	iResult = ga_insert(&gaPool, "00000000", CHRO_LEN);
-	if(iResult != 0)
+	iResult = ga_insert(&gaPool, chros[0], CHRO_LEN);
+	if(iResult < 0)
 	{
 		printf("ga_insert() failed!\n");
 		return -1;
 	}
 
-	iResult = ga_insert(&gaPool, "00000000", CHRO_LEN);
-	if(iResult != 0)
+	iResult = ga_insert(&gaPool, chros[1], CHRO_LEN);
+	if(iResult < 0)
 	{
 		printf("ga_insert() failed!\n");
 		return -1;
@@ -55,8 +59,11 @@ int main(int argc, char* argv[])
 		// Mutation
 		if(i % 100 == 0)
 		{
+			randIndex = rand() % gaPool.poolSize;
+			mutPosition = rand() % CHRO_LEN;
+			mutValue = (gaPool.pool[randIndex][mutPosition] == 0) ? 1 : 0;
+			ga_edit_chro(&gaPool, randIndex, mutPosition, mutValue);
 			//ga_mutation(&gaPool, rand() % gaPool.poolSize, rand() % CHRO_LEN);
-			ga_mutation(&gaPool, 0, rand() % CHRO_LEN);
 		}
 
 		// Crossover
@@ -103,7 +110,7 @@ int main(int argc, char* argv[])
 	return 0;
 }
 
-double fitness(char* chro, int chroLen)
+double fitness(GA_TYPE* chro, int chroLen)
 {
 	int i;
 	int calcTmp;
@@ -113,7 +120,7 @@ double fitness(char* chro, int chroLen)
 	calcTmp = 1;
 	for(i = 0; i < chroLen; i++)
 	{
-		result += (chro[i] - '0') * calcTmp;
+		result += (chro[i]) * calcTmp;
 		calcTmp *= 2;
 	}
 
