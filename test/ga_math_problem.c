@@ -2,9 +2,13 @@
 #include <stdlib.h>
 #include <math.h>
 #include <conio.h>
+#include <time.h>
 #include <galib.h>
 
-#define CHRO_LEN	20
+//#define DEBUG
+#include <debug.h>
+
+#define CHRO_LEN	500
 #define NODE_MAX	30
 #define NODE_MIN	-30
 
@@ -16,12 +20,11 @@
 #define TARGET		1333
 
 void RandChro(GA_TYPE* chro, int chroLen);
-void Mutation(GA_TYPE* chro, int chroLen);
 double fitness(GA_TYPE* chro, int chroLen);
 
 int main(int argc, char* argv[])
 {
-	int i;
+	int i, j;
 	int iResult;
 	int iterCount;
 	int crossIndex;
@@ -29,10 +32,13 @@ int main(int argc, char* argv[])
 	double fitLog[ITER_COUNT] = {0};
 
 	struct GA_POOL gaPool;
-
+	
+	GA_TYPE tmpValue;
 	GA_TYPE tmpChro[2][CHRO_LEN];
 
 	FILE* fileWrite = NULL;
+
+	srand(time(NULL));
 
 	// Create ga pool
 	iResult = ga_create(&gaPool, CHRO_LEN);
@@ -90,16 +96,23 @@ int main(int argc, char* argv[])
 		// Mutatuon
 		for(i = 0; i < 4; i++)
 		{
-			if(rand() % 100 < MUT_RATE * 100)
-				Mutation(gaPool.pool[i + crossIndex], CHRO_LEN);
+			for(j = 0; j < CHRO_LEN; j++)
+			{
+				if(rand() % 100 < MUT_RATE * ITER_COUNT)
+				{
+					LOG("Mutation");
+					tmpValue = rand() % (NODE_MAX - NODE_MIN + 1) + NODE_MIN;
+					ga_edit_chro(&gaPool, i + crossIndex, j, tmpValue);
+				}
+			}
 		}
 			
 		// Order
 		ga_order(&gaPool, fitness);
 
 		// Print 1st fitness
-		fitLog[iterCount] = fitness(gaPool.pool[0], CHRO_LEN);
-		printf("1st fitness: %lf\n", fitLog[iterCount]);
+		//fitLog[iterCount] = fitness(gaPool.pool[0], CHRO_LEN);
+		printf("1st fitness: %lf\n", fitness(gaPool.pool[0], CHRO_LEN));
 
 		// Kill
 		ga_kill_after(&gaPool, GA_RESERVE);
@@ -124,16 +137,6 @@ int main(int argc, char* argv[])
 	return 0;
 }
 
-void Mutation(GA_TYPE* chro, int chroLen)
-{
-	int i;
-	for(i = 0; i < chroLen; i++)
-	{
-		if(rand() % 100 < MUT_RATE * 100)
-			chro[i] = rand() % (NODE_MAX - NODE_MIN + 1) + NODE_MIN;
-	}
-}
-
 void RandChro(GA_TYPE* chro, int chroLen)
 {
 	int i;
@@ -142,7 +145,6 @@ void RandChro(GA_TYPE* chro, int chroLen)
 		chro[i] = rand() % (NODE_MAX - NODE_MIN + 1) + NODE_MIN;
 	}
 }
-
 
 double fitness(GA_TYPE* chro, int chroLen)
 {
