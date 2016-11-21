@@ -3,6 +3,7 @@
 #include <string.h>
 
 #include "galib.h"
+#include "debug.h"
 
 void ga_copy(GA_TYPE* dst, GA_TYPE* src, int startIndex, int size);
 
@@ -11,10 +12,12 @@ int ga_kill_after(struct GA_POOL* gaPoolPtr, int killIndex)
 	int i;
 	int retValue = 0;
 	void* allocTmp = NULL;
-
+	
 	// Checking
+	LOG("GA pool has %d chromosome", gaPoolPtr->poolSize);
 	if(killIndex >= gaPoolPtr->poolSize)
 	{
+		LOG("Index out of range");
 		retValue = -1;
 		goto RET;
 	}
@@ -22,6 +25,7 @@ int ga_kill_after(struct GA_POOL* gaPoolPtr, int killIndex)
 	// Free chromosomes
 	for(i = killIndex + 1; i < gaPoolPtr->poolSize; i++)
 	{
+		LOG("Free #%d chromosome", i);
 		if(gaPoolPtr->pool[i] != NULL)
 			free(gaPoolPtr->pool[i]);
 	}
@@ -29,6 +33,7 @@ int ga_kill_after(struct GA_POOL* gaPoolPtr, int killIndex)
 	allocTmp = realloc(gaPoolPtr->pool, sizeof(GA_TYPE*) * (killIndex + 1));
 	if(allocTmp == NULL)
 	{
+		LOG("Realloc failed");
 		retValue = -1;
 		goto RET;
 	}

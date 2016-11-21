@@ -6,14 +6,14 @@ set(CMAKE_CONFIGURATION_TYPES "Debug;Release" CACHE STRING "Build confugure" FOR
 if(DEFINED CMAKE_BUILD_TYPE)
 	set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS ${CMAKE_CONFIGURATION_TYPES})
 endif()
-set(CMAKE_BUILD_TYPE Release)
+#set(CMAKE_BUILD_TYPE Release)
 
 # Set project
 project(${PROJECT_NAME} C CXX)
 
 # Add definition
-if(ENABLE_INDEX_CHECKING)
-	add_definitions(-DENABLE_INDEX_CHECKING)
+if(CMAKE_BUILD_TYPE MATCHES Debug)
+	add_definitions(-DDEBUG)
 endif()
 
 # Include directory
