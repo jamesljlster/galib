@@ -4,14 +4,16 @@
 #include <conio.h>
 #include <galib.h>
 
-#define CHRO_LEN	8
+#define CHRO_LEN	20
 #define NODE_MAX	30
 #define NODE_MIN	-30
 
 #define MUT_RATE	0.4
 
-#define GA_RESERVE	20
-#define ITER_COUNT	1000
+#define GA_RESERVE	50
+#define ITER_COUNT	10000
+
+#define TARGET		1333
 
 void RandChro(GA_TYPE* chro, int chroLen);
 void Mutation(GA_TYPE* chro, int chroLen);
@@ -58,7 +60,7 @@ int main(int argc, char* argv[])
 	}
 	
 	iterCount = 0;
-	while(iterCount < ITER_COUNT)
+	while(1 /*iterCount < ITER_COUNT*/)
 	{
 		if(kbhit())
 		{
@@ -153,5 +155,5 @@ double fitness(GA_TYPE* chro, int chroLen)
 		calcTmp += pow(-1, i % 2) * chro[i + 1];
 	}
 
-	return 170.0 - fabs(170.0 - calcTmp);
+	return TARGET - fabs(TARGET - calcTmp);
 }
