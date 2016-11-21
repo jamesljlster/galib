@@ -13,8 +13,9 @@ int ga_kill_after(struct GA_POOL* gaPoolPtr, int killIndex)
 	int retValue = 0;
 	void* allocTmp = NULL;
 	
-	// Checking
 	LOG("Enter");
+
+	// Checking
 	LOG("killIndex: %d", killIndex);
 	LOG("GA pool has %d chromosome", gaPoolPtr->poolSize);
 	if(killIndex >= gaPoolPtr->poolSize)
