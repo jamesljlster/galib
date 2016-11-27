@@ -22,6 +22,21 @@
 void RandChro(GA_TYPE* chro, int chroLen);
 double fitness(GA_TYPE* chro, int chroLen);
 
+int ga_print_chro(struct GA_POOL* gaPoolPtr, int chroIndex)
+{
+	int i;
+	
+	// Checking
+	if(chroIndex >= gaPoolPtr->poolSize)
+		return -1;
+	
+	for(i = 0; i < gaPoolPtr->chroLen; i++)
+	{
+		printf("%lf ", gaPoolPtr->pool[chroIndex][i]);
+	}
+
+	return 0;
+}
 int main(int argc, char* argv[])
 {
 	int i, j;
@@ -108,7 +123,7 @@ int main(int argc, char* argv[])
 		}
 			
 		// Order
-		ga_order(&gaPool, fitness);
+		ga_order(&gaPool, fitness, 0);
 
 		// Print 1st fitness
 		//fitLog[iterCount] = fitness(gaPool.pool[0], CHRO_LEN);

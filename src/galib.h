@@ -92,7 +92,7 @@ int ga_edit_chro(struct GA_POOL* gaPoolPtr, int chroIndex, int position, GA_TYPE
 
 //int ga_mutation(struct GA_POOL* gaPoolPtr, int chroIndex, int position);
 
-int ga_print_chro(struct GA_POOL* gaPoolPtr, int chroIndex);
+//int ga_print_chro(struct GA_POOL* gaPoolPtr, int chroIndex);
 
 #ifdef __cplusplus
 }

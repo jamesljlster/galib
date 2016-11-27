@@ -286,21 +286,21 @@ int ga_order(struct GA_POOL* gaPoolPtr, double (*fitness)(GA_TYPE* chro, int chr
 	return 0;
 }
 
-int ga_print_chro(struct GA_POOL* gaPoolPtr, int chroIndex)
-{
-	int i;
-	
-	// Checking
-	if(chroIndex >= gaPoolPtr->poolSize)
-		return -1;
-	
-	for(i = 0; i < gaPoolPtr->chroLen; i++)
-	{
-		printf("%d ", gaPoolPtr->pool[chroIndex][i]);
-	}
-
-	return 0;
-}
+//int ga_print_chro(struct GA_POOL* gaPoolPtr, int chroIndex)
+//{
+//	int i;
+//	
+//	// Checking
+//	if(chroIndex >= gaPoolPtr->poolSize)
+//		return -1;
+//	
+//	for(i = 0; i < gaPoolPtr->chroLen; i++)
+//	{
+//		printf("%d ", gaPoolPtr->pool[chroIndex][i]);
+//	}
+//
+//	return 0;
+//}
 
 
 int ga_insert(struct GA_POOL* gaPoolPtr, GA_TYPE* chro, int chroLen)
