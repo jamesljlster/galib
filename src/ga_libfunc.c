@@ -251,17 +251,29 @@ void ga_copy(GA_TYPE* dst, GA_TYPE* src, int startIndex, int size)
 	LOG("Exit");
 }
 
-int ga_order(struct GA_POOL* gaPoolPtr, double (*fitness)(GA_TYPE* chro, int chroLen))
+int less_then(double a, double b)
+{
+	return a < b;
+}
+
+int high_then(double a, double b)
+{
+	return a > b;
+}
+
+int ga_order(struct GA_POOL* gaPoolPtr, double (*fitness)(GA_TYPE* chro, int chroLen), int inverse)
 {
 	int i, j;
+	int (*cmp_method)(double, double);
 	GA_TYPE* tmp;
 	
 	LOG("Enter");
+	cmp_method = (inverse > 0) ? high_then : less_then;
 	for(i = 0; i < gaPoolPtr->poolSize - 1; i++)
 	{
 		for(j = 0; j < (gaPoolPtr->poolSize - 1) - i; j++)
 		{
-			if(fitness(gaPoolPtr->pool[j], gaPoolPtr->chroLen) < fitness(gaPoolPtr->pool[j + 1], gaPoolPtr->chroLen))
+			if(cmp_method(fitness(gaPoolPtr->pool[j], gaPoolPtr->chroLen), fitness(gaPoolPtr->pool[j + 1], gaPoolPtr->chroLen)))
 			{
 				tmp = gaPoolPtr->pool[j];
 				gaPoolPtr->pool[j] = gaPoolPtr->pool[j + 1];
