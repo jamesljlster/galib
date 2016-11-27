@@ -1,7 +1,7 @@
 #ifndef _GALIB_H_
 #define _GALIB_H_
 
-typedef int GA_TYPE;
+typedef double GA_TYPE;
 
 struct GA_POOL
 {
@@ -41,12 +41,13 @@ int ga_insert(struct GA_POOL* gaPoolPtr, GA_TYPE* chro, int chroLen);
  *	@return	If function execute succeed, function would return the target chromosome index in GA pool, else return -1.
  */
 
-int ga_order(struct GA_POOL* gaPoolPtr, double (*fitness)(GA_TYPE* chro, int chroLen));
+int ga_order(struct GA_POOL* gaPoolPtr, double (*fitness)(GA_TYPE* chro, int chroLen), int inverse);
 /**
  *	@fn		int ga_order(struct GA_POOL* gaPoolPtr, double (*fitness)(GA_TYPE* chro, int chroLen));
  *	@brief	Order chromosomes in GA pool with given fitness function.
  *	@param	gaPoolPtr:	GA data structure pointer.
  *	@param	fitness:	Fitness function.
+ *	@param	inverse:	If given inverse > 0, order operation would sort fitness from low to high.
  *	@return	If error, the function would return -1, else return 0.
  */
  
@@ -91,7 +92,7 @@ int ga_edit_chro(struct GA_POOL* gaPoolPtr, int chroIndex, int position, GA_TYPE
 
 //int ga_mutation(struct GA_POOL* gaPoolPtr, int chroIndex, int position);
 
-int ga_print_chro(struct GA_POOL* gaPoolPtr, int chroIndex);
+//int ga_print_chro(struct GA_POOL* gaPoolPtr, int chroIndex);
 
 #ifdef __cplusplus
 }
