@@ -10,7 +10,7 @@
 #define CHRO_RESERVE	20
 #define ITER_COUNT		1000
 
-double fitness(GA_TYPE* chro, int chroLen);
+double fitness(GA_TYPE* chro, int chroLen, void* arg);
 
 int ga_print_chro(struct GA_POOL* gaPoolPtr, int chroIndex)
 {
@@ -86,10 +86,10 @@ int main(int argc, char* argv[])
 		ga_crossover(&gaPool, 0, 1, rand() % (CHRO_LEN - 1));
 
 		// Order
-		ga_order(&gaPool, fitness, 0);
+		ga_order(&gaPool, fitness, 0, NULL);
 
 		// Print 1st fitness
-		fitLog[i] = fitness(gaPool.pool[0], gaPool.chroLen);
+		fitLog[i] = fitness(gaPool.pool[0], gaPool.chroLen, NULL);
 		ga_print_chro(&gaPool, 0);
 		printf(", fitness = %lf\n", fitLog[i]);
 
@@ -104,7 +104,7 @@ int main(int argc, char* argv[])
 	for(i = 0; i < gaPool.poolSize; i++)
 	{
 		ga_print_chro(&gaPool, i);
-		printf(", fitness = %lf\n", fitness(gaPool.pool[i], gaPool.chroLen));
+		printf(", fitness = %lf\n", fitness(gaPool.pool[i], gaPool.chroLen, NULL));
 	}
 	
 	if(argc >= 2)
@@ -126,7 +126,7 @@ int main(int argc, char* argv[])
 	return 0;
 }
 
-double fitness(GA_TYPE* chro, int chroLen)
+double fitness(GA_TYPE* chro, int chroLen, void* arg)
 {
 	int i;
 	int calcTmp;
