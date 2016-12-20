@@ -59,7 +59,7 @@ RET:
 int ga_edit_chro(struct GA_POOL* gaPoolPtr, int chroIndex, int position, GA_TYPE newValue)
 {
 	LOG("Enter");
-	LOG("chroIndex: %d, position: %d, newValue: %d", chroIndex, position, newValue);
+	LOG("chroIndex: %d, position: %d, newValue: %lf", chroIndex, position, newValue);
 
 	// Checking
 	if(chroIndex >= gaPoolPtr->poolSize || position >= gaPoolPtr->chroLen)
