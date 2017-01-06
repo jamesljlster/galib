@@ -21,7 +21,7 @@
 
 void rand_chro(GA_TYPE* chro, int chroLen);
 double rand_node();
-double fitness(GA_TYPE* chro, int chroLen);
+double fitness(GA_TYPE* chro, int chroLen, void* arg);
 double factorial(int series);
 double taylor_exp(double x, double a, double numOfSeries);
 
@@ -102,10 +102,10 @@ int main(int argc, char* argv)
 		}
 
 		// Order
-		ga_order(&ga, fitness, 1);
+		ga_order(&ga, fitness, 1, NULL);
 
 		// Print 1st fitness
-		printf("1st fitness: %lf\n", fitness(ga.pool[0], CHRO_LEN));
+		printf("1st fitness: %lf\n", fitness(ga.pool[0], CHRO_LEN, NULL));
 
 		// Kill
 		ga_kill_after(&ga, GA_RESERVE);
@@ -129,7 +129,7 @@ double calc_chro(GA_TYPE* chro, int chroLen, double x)
 	return calcTmp;
 }
 
-double fitness(GA_TYPE* chro, int chroLen)
+double fitness(GA_TYPE* chro, int chroLen, void* arg)
 {
 	return fabs(taylor_exp(TAYLOR_ARG, TAYLOR_CONST, chroLen) - calc_chro(chro, chroLen, TAYLOR_ARG));
 }

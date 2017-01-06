@@ -41,7 +41,7 @@ int ga_insert(struct GA_POOL* gaPoolPtr, GA_TYPE* chro, int chroLen);
  *	@return	If function execute succeed, function would return the target chromosome index in GA pool, else return -1.
  */
 
-int ga_order(struct GA_POOL* gaPoolPtr, double (*fitness)(GA_TYPE* chro, int chroLen), int inverse);
+int ga_order(struct GA_POOL* gaPoolPtr, double (*fitness)(GA_TYPE* chro, int chroLen, void* arg), int inverse, void* arg);
 /**
  *	@fn		int ga_order(struct GA_POOL* gaPoolPtr, double (*fitness)(GA_TYPE* chro, int chroLen));
  *	@brief	Order chromosomes in GA pool with given fitness function.

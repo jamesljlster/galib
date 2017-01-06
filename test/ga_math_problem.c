@@ -20,7 +20,7 @@
 #define TARGET		1333
 
 void RandChro(GA_TYPE* chro, int chroLen);
-double fitness(GA_TYPE* chro, int chroLen);
+double fitness(GA_TYPE* chro, int chroLen, void* arg);
 
 int ga_print_chro(struct GA_POOL* gaPoolPtr, int chroIndex)
 {
@@ -37,6 +37,7 @@ int ga_print_chro(struct GA_POOL* gaPoolPtr, int chroIndex)
 
 	return 0;
 }
+
 int main(int argc, char* argv[])
 {
 	int i, j;
@@ -123,11 +124,11 @@ int main(int argc, char* argv[])
 		}
 			
 		// Order
-		ga_order(&gaPool, fitness, 0);
+		ga_order(&gaPool, fitness, 0, NULL);
 
 		// Print 1st fitness
 		//fitLog[iterCount] = fitness(gaPool.pool[0], CHRO_LEN);
-		printf("1st fitness: %lf\n", fitness(gaPool.pool[0], CHRO_LEN));
+		printf("1st fitness: %lf\n", fitness(gaPool.pool[0], CHRO_LEN, NULL));
 
 		// Kill
 		ga_kill_after(&gaPool, GA_RESERVE);
@@ -161,7 +162,7 @@ void RandChro(GA_TYPE* chro, int chroLen)
 	}
 }
 
-double fitness(GA_TYPE* chro, int chroLen)
+double fitness(GA_TYPE* chro, int chroLen, void* arg)
 {
 	int i;
 	double calcTmp;

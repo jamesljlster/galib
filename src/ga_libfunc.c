@@ -59,7 +59,7 @@ RET:
 int ga_edit_chro(struct GA_POOL* gaPoolPtr, int chroIndex, int position, GA_TYPE newValue)
 {
 	LOG("Enter");
-	LOG("chroIndex: %d, position: %d, newValue: %d", chroIndex, position, newValue);
+	LOG("chroIndex: %d, position: %d, newValue: %lf", chroIndex, position, newValue);
 
 	// Checking
 	if(chroIndex >= gaPoolPtr->poolSize || position >= gaPoolPtr->chroLen)
@@ -261,7 +261,7 @@ int high_then(double a, double b)
 	return a > b;
 }
 
-int ga_order(struct GA_POOL* gaPoolPtr, double (*fitness)(GA_TYPE* chro, int chroLen), int inverse)
+int ga_order(struct GA_POOL* gaPoolPtr, double (*fitness)(GA_TYPE* chro, int chroLen, void* arg), int inverse, void* arg)
 {
 	int i, j;
 	int (*cmp_method)(double, double);
@@ -273,7 +273,7 @@ int ga_order(struct GA_POOL* gaPoolPtr, double (*fitness)(GA_TYPE* chro, int chr
 	{
 		for(j = 0; j < (gaPoolPtr->poolSize - 1) - i; j++)
 		{
-			if(cmp_method(fitness(gaPoolPtr->pool[j], gaPoolPtr->chroLen), fitness(gaPoolPtr->pool[j + 1], gaPoolPtr->chroLen)))
+			if(cmp_method(fitness(gaPoolPtr->pool[j], gaPoolPtr->chroLen, arg), fitness(gaPoolPtr->pool[j + 1], gaPoolPtr->chroLen, arg)))
 			{
 				tmp = gaPoolPtr->pool[j];
 				gaPoolPtr->pool[j] = gaPoolPtr->pool[j + 1];
