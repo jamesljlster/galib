@@ -117,7 +117,6 @@ int main(int argc, char* argv)
 double calc_chro(GA_TYPE* chro, int chroLen, double x)
 {
 	int i;
-	double powTmp;
 	double calcTmp;
 	
 	calcTmp = 0;
@@ -149,7 +148,6 @@ double rand_node()
 	int randRange;
 	int randExp;
 	double randNum;
-	double result;
 
 	randRange = RAND_NUM_MAX - RAND_NUM_MIN + 1;
 	randRange *= RAND_PRECISION;
