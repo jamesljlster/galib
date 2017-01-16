@@ -114,7 +114,7 @@ int main(int argc, char* argv[])
 		{
 			for(j = 0; j < CHRO_LEN; j++)
 			{
-				if(rand() % 100 < MUT_RATE * ITER_COUNT)
+				if(rand() % 100 < MUT_RATE * 100)
 				{
 					LOG("Mutation");
 					tmpValue = rand() % (NODE_MAX - NODE_MIN + 1) + NODE_MIN;
@@ -146,8 +146,9 @@ int main(int argc, char* argv[])
 			{
 				fprintf(fileWrite, "%lf\n", fitLog[i]);
 			}
+
+			fclose(fileWrite);
 		}
-		fclose(fileWrite);
 	}
 
 	return 0;

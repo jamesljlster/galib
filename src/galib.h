@@ -11,9 +11,19 @@ struct GA_POOL
 	GA_TYPE** pool;
 };
 
+struct GA_SET
+{
+	int startIndex;
+	int setLen;
+};
+
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+struct GA_SET ga_set_init(int startIndex, int setLen);
+
+int ga_set_crossover(struct GA_POOL* gaPoolPtr, struct GA_SET gaSet, int chroIndex1, int chroIndex2, int cut);
 
 int ga_create(struct GA_POOL* gaPoolPtr, int chroLen);
 /**

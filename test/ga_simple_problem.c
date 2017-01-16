@@ -117,8 +117,9 @@ int main(int argc, char* argv[])
 			{
 				fprintf(fileWrite, "%lf\n", fitLog[i]);
 			}
+
+			fclose(fileWrite);
 		}
-		fclose(fileWrite);
 	}
 
 	ga_delete(&gaPool);

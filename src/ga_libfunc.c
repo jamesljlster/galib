@@ -4,8 +4,7 @@
 
 #include "galib.h"
 #include "debug.h"
-
-void ga_copy(GA_TYPE* dst, GA_TYPE* src, int startIndex, int size);
+#include "ga_private.h"
 
 int ga_kill_after(struct GA_POOL* gaPoolPtr, int killIndex)
 {
