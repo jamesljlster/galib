@@ -85,7 +85,7 @@ int ga_set_crossover(struct GA_POOL* gaPoolPtr, struct GA_SET gaSet, int chroInd
 			for(j = 0; j < 2; j++)
 			{
 				ga_copy(cross[k], parent[i], gaSet.startIndex, cut + 1);
-				ga_copy(cross[k], parent[j], cut + 1, gaPoolPtr->chroLen - cut - 1);
+				ga_copy(cross[k], parent[j], gaSet.startIndex + cut + 1, (gaSet.startIndex + gaSet.setLen) - (cut + 1));
 
 				ga_copy(cross[k], parent[subGroup], 0, gaSet.startIndex);
 				ga_copy(cross[k], parent[subGroup], gaSet.startIndex + gaSet.setLen, gaPoolPtr->chroLen - (gaSet.startIndex + gaSet.setLen));
