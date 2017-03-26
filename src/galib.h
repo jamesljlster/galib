@@ -100,10 +100,6 @@ int ga_edit_chro(struct GA_POOL* gaPoolPtr, int chroIndex, int position, GA_TYPE
  *	@return	If error, the function would return -1, else return 0.
  */
 
-//int ga_mutation(struct GA_POOL* gaPoolPtr, int chroIndex, int position);
-
-//int ga_print_chro(struct GA_POOL* gaPoolPtr, int chroIndex);
-
 #ifdef __cplusplus
 }
 #endif
