@@ -248,17 +248,40 @@ int high_then(double a, double b)
 int ga_order(struct GA_POOL* gaPoolPtr, double (*fitness)(GA_TYPE* chro, int chroLen, void* arg), int inverse, void* arg)
 {
 	int i, j;
+	int retValue = 0;
 	int (*cmp_method)(double, double);
 	GA_TYPE* tmp;
+	double* fitList = NULL;
+	double fitTmp;
 	
 	LOG("Enter");
+	// Memory allocation
+	fitList = calloc(gaPoolPtr->poolSize, sizeof(double));
+	if(fitList == NULL)
+	{
+		LOG("Memory allocation failed!");
+		retValue = -1;
+		goto RET;
+	}
+
+	// Find fitness
+	for(i = 0; i < gaPoolPtr->poolSize; i++)
+	{
+		fitList[i] = fitness(gaPoolPtr->pool[i], gaPoolPtr->chroLen, arg);
+	}
+
+	// Order
 	cmp_method = (inverse > 0) ? high_then : less_then;
 	for(i = 0; i < gaPoolPtr->poolSize - 1; i++)
 	{
 		for(j = 0; j < (gaPoolPtr->poolSize - 1) - i; j++)
 		{
-			if(cmp_method(fitness(gaPoolPtr->pool[j], gaPoolPtr->chroLen, arg), fitness(gaPoolPtr->pool[j + 1], gaPoolPtr->chroLen, arg)))
+			if(cmp_method(fitList[j], fitList[j + 1]))
 			{
+				fitTmp = fitList[j];
+				fitList[j] = fitList[j + 1];
+				fitList[j + 1] = fitTmp;
+
 				tmp = gaPoolPtr->pool[j];
 				gaPoolPtr->pool[j] = gaPoolPtr->pool[j + 1];
 				gaPoolPtr->pool[j + 1] = tmp;
@@ -266,8 +289,14 @@ int ga_order(struct GA_POOL* gaPoolPtr, double (*fitness)(GA_TYPE* chro, int chr
 		}
 	}
 	
+RET:
+	if(fitList != NULL)
+	{
+		free(fitList);
+	}
+
 	LOG("Exit");
-	return 0;
+	return retValue;
 }
 
 int ga_insert(struct GA_POOL* gaPoolPtr, GA_TYPE* chro, int chroLen)
