@@ -24,12 +24,12 @@ int ga_remove_same_chro(struct GA_POOL* gaPoolPtr)
 	}
 
 	// Compare chromosomes
-	for(i = 1; i < gaPoolPtr->poolSize - 1; i++)
+	for(i = 0; i < gaPoolPtr->poolSize - 1; i++)
 	{
-		for(j = i; j < gaPoolPtr->poolSize; j++)
+		for(j = i + 1; j < gaPoolPtr->poolSize; j++)
 		{
 			iResult = memcmp(gaPoolPtr->pool[i], gaPoolPtr->pool[j], sizeof(GA_TYPE) * gaPoolPtr->chroLen);
-			if(iResult != 0)
+			if(iResult == 0)
 			{
 				markList[j] = 1;
 			}
@@ -38,14 +38,14 @@ int ga_remove_same_chro(struct GA_POOL* gaPoolPtr)
 
 	// Delete marked chromosomes
 	sizeHandle = gaPoolPtr->poolSize;
-	for(i = gaPoolPtr->poolSize - 1; i >= 0; i++)
+	for(i = gaPoolPtr->poolSize - 1; i >= 0; i--)
 	{
 		if(markList[i] > 0)
 		{
 			iResult = ga_remove(gaPoolPtr, i);
 			if(iResult < 0)
 			{
-				LOG("ga_remove() failed!");
+				LOG("Run ga_remove() with index:%d failed!", i);
 				retValue = -1;
 				goto RET;
 			}
