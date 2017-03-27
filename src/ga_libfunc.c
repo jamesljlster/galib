@@ -6,6 +6,79 @@
 #include "debug.h"
 #include "ga_private.h"
 
+int ga_remove_same_chro(struct GA_POOL* gaPoolPtr)
+{
+	int i, j;
+	int iResult;
+	int retValue = 0;
+	int sizeHandle;
+	char* markList = NULL;
+	void* allocTmp = NULL;
+
+	// Memory allocation
+	markList = calloc(gaPoolPtr->poolSize, sizeof(char));
+	if(markList == NULL)
+	{
+		retValue = -1;
+		goto RET;
+	}
+
+	// Compare chromosomes
+	for(i = 1; i < gaPoolPtr->poolSize - 1; i++)
+	{
+		for(j = i; j < gaPoolPtr->poolSize; j++)
+		{
+			iResult = memcmp(gaPoolPtr->pool[i], gaPoolPtr->pool[j], sizeof(GA_TYPE) * gaPoolPtr->chroLen);
+			if(iResult != 0)
+			{
+				markList[j] = 1;
+			}
+		}
+	}
+
+	// Delete marked chromosomes
+	sizeHandle = gaPoolPtr->poolSize;
+	for(i = gaPoolPtr->poolSize - 1; i >= 0; i++)
+	{
+		if(markList[i] > 0)
+		{
+			iResult = ga_remove(gaPoolPtr, i);
+			if(iResult < 0)
+			{
+				LOG("ga_remove() failed!");
+				retValue = -1;
+				goto RET;
+			}
+			else
+			{
+				sizeHandle--;
+			}
+		}
+	}
+
+	// Reallocate memory
+	allocTmp = realloc(gaPoolPtr->pool, sizeof(GA_TYPE*) * sizeHandle);
+	if(allocTmp == NULL)
+	{
+		LOG("Realloc failed!");
+		retValue = -1;
+		goto RET;
+	}
+	else
+	{
+		gaPoolPtr->pool = allocTmp;
+		gaPoolPtr->poolSize = sizeHandle;
+	}
+
+RET:
+	if(markList != NULL)
+	{
+		free(markList);
+	}
+
+	return retValue;
+}
+
 int ga_remove(struct GA_POOL* gaPoolPtr, int chroIndex)
 {
 	int i;
@@ -42,6 +115,7 @@ int ga_remove(struct GA_POOL* gaPoolPtr, int chroIndex)
 		}
 		else
 		{
+			gaPoolPtr->pool = allocTmp;
 			gaPoolPtr->poolSize -= 1;
 		}
 	}

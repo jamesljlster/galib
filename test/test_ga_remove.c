@@ -45,7 +45,7 @@ int main()
 
 	// Print ga pool
 	printf("Pool size: %d\n", ga.poolSize);
-	printf("Pool addr: %X\n", (unsigned int*)ga.pool);
+	printf("Pool addr: %p\n", ga.pool);
 
 	return 0;
 }

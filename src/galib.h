@@ -60,6 +60,14 @@ int ga_remove(struct GA_POOL* gaPoolPtr, int chroIndex);
  *	@return	If error, the function would return -1, else return 0.
  */
 
+int ga_remove_same_chro(struct GA_POOL* gaPoolPtr);
+/**
+ *	@fn		int ga_remove_same_chro(struct GA_POOL* gaPoolPtr);
+ *	@brief	Remove same chromosome in GA pool.
+ *	@param	gaPoolPtr:	GA data structure pointer.
+ *	@return	If error, the function would return -1, else return 0.
+ */
+
 int ga_order(struct GA_POOL* gaPoolPtr, double (*fitness)(GA_TYPE* chro, int chroLen, void* arg), int inverse, void* arg);
 /**
  *	@fn		int ga_order(struct GA_POOL* gaPoolPtr, double (*fitness)(GA_TYPE* chro, int chroLen));
