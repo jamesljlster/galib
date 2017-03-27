@@ -101,6 +101,28 @@ int main(int argc, char* argv)
 			}
 		}
 
+		// Kill same chromosome
+		iResult = ga_remove_same_chro(&ga);
+		if(iResult < 0)
+		{
+			printf("ga_remove_same_chro() failed!\n");
+			return -1;
+		}
+
+		if(ga.poolSize < 2)
+		{
+			// Generate random chrosomes
+			rand_chro(tmpChros[0], CHRO_LEN);
+
+			// Insert chrosomes to ga pool
+			iResult = ga_insert(&ga, tmpChros[0], CHRO_LEN);
+			if(iResult < 0)
+			{
+				printf("ga_insert() failed!\n");
+				return -1;
+			}
+		}
+
 		// Order
 		ga_order(&ga, fitness, 1, NULL);
 
