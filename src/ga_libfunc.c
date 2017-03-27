@@ -6,6 +6,130 @@
 #include "debug.h"
 #include "ga_private.h"
 
+int ga_remove_same_chro(struct GA_POOL* gaPoolPtr)
+{
+	int i, j;
+	int iResult;
+	int retValue = 0;
+	int sizeHandle;
+	char* markList = NULL;
+	void* allocTmp = NULL;
+
+	// Memory allocation
+	markList = calloc(gaPoolPtr->poolSize, sizeof(char));
+	if(markList == NULL)
+	{
+		retValue = -1;
+		goto RET;
+	}
+
+	// Compare chromosomes
+	for(i = 0; i < gaPoolPtr->poolSize - 1; i++)
+	{
+		for(j = i + 1; j < gaPoolPtr->poolSize; j++)
+		{
+			iResult = memcmp(gaPoolPtr->pool[i], gaPoolPtr->pool[j], sizeof(GA_TYPE) * gaPoolPtr->chroLen);
+			if(iResult == 0)
+			{
+				markList[j] = 1;
+			}
+		}
+	}
+
+	// Delete marked chromosomes
+	sizeHandle = gaPoolPtr->poolSize;
+	for(i = gaPoolPtr->poolSize - 1; i >= 0; i--)
+	{
+		if(markList[i] > 0)
+		{
+			iResult = ga_remove(gaPoolPtr, i);
+			if(iResult < 0)
+			{
+				LOG("Run ga_remove() with index:%d failed!", i);
+				retValue = -1;
+				goto RET;
+			}
+			else
+			{
+				sizeHandle--;
+			}
+		}
+	}
+
+	// Reallocate memory
+	allocTmp = realloc(gaPoolPtr->pool, sizeof(GA_TYPE*) * sizeHandle);
+	if(allocTmp == NULL)
+	{
+		LOG("Realloc failed!");
+		retValue = -1;
+		goto RET;
+	}
+	else
+	{
+		gaPoolPtr->pool = allocTmp;
+		gaPoolPtr->poolSize = sizeHandle;
+	}
+
+RET:
+	if(markList != NULL)
+	{
+		free(markList);
+	}
+
+	return retValue;
+}
+
+int ga_remove(struct GA_POOL* gaPoolPtr, int chroIndex)
+{
+	int i;
+	int retValue = 0;
+	void* allocTmp = NULL;
+
+	// Checking
+	if(chroIndex >= gaPoolPtr->poolSize)
+	{
+		LOG("Index out of range");
+		retValue = -1;
+		goto RET;
+	}
+
+	// Free chromosome
+	if(gaPoolPtr->pool[chroIndex] != NULL)
+	{
+		free(gaPoolPtr->pool[chroIndex]);
+	}
+
+	// Move pointer list
+	for(i = chroIndex; i + 1 < gaPoolPtr->poolSize; i++)
+	{
+		gaPoolPtr->pool[i] = gaPoolPtr->pool[i + 1];
+	}
+
+	// Reallocate memroy
+	if(gaPoolPtr->poolSize - 1 > 0)
+	{
+		allocTmp = realloc(gaPoolPtr->pool, sizeof(GA_TYPE*) * (gaPoolPtr->poolSize - 1));
+		if(allocTmp == NULL)
+		{
+			retValue = -1;
+		}
+		else
+		{
+			gaPoolPtr->pool = allocTmp;
+			gaPoolPtr->poolSize -= 1;
+		}
+	}
+	else
+	{
+		free(gaPoolPtr->pool);
+		gaPoolPtr->pool = NULL;
+		gaPoolPtr->poolSize = 0;
+	}
+
+RET:
+	return retValue;
+}
+
 int ga_kill_after(struct GA_POOL* gaPoolPtr, int killIndex)
 {
 	int i;
@@ -69,21 +193,6 @@ int ga_edit_chro(struct GA_POOL* gaPoolPtr, int chroIndex, int position, GA_TYPE
 	LOG("Exit");
 	return 0;
 }
-
-//int ga_mutation(struct GA_POOL* gaPoolPtr, int chroIndex, int position)
-//{
-//	GA_TYPE tmp;
-//
-//	// Checking
-//	if(chroIndex >= gaPoolPtr->poolSize || position >= gaPoolPtr->chroLen)
-//		return -1;
-//
-//	tmp = gaPoolPtr->pool[chroIndex][position];
-//	tmp = 1 - (tmp - '0') + '0';
-//	gaPoolPtr->pool[chroIndex][position] = tmp;
-//
-//	return 0;
-//}
 
 int ga_reproduction(struct GA_POOL* gaPoolPtr, int chroIndex)
 {
@@ -263,17 +372,40 @@ int high_then(double a, double b)
 int ga_order(struct GA_POOL* gaPoolPtr, double (*fitness)(GA_TYPE* chro, int chroLen, void* arg), int inverse, void* arg)
 {
 	int i, j;
+	int retValue = 0;
 	int (*cmp_method)(double, double);
 	GA_TYPE* tmp;
+	double* fitList = NULL;
+	double fitTmp;
 	
 	LOG("Enter");
+	// Memory allocation
+	fitList = calloc(gaPoolPtr->poolSize, sizeof(double));
+	if(fitList == NULL)
+	{
+		LOG("Memory allocation failed!");
+		retValue = -1;
+		goto RET;
+	}
+
+	// Find fitness
+	for(i = 0; i < gaPoolPtr->poolSize; i++)
+	{
+		fitList[i] = fitness(gaPoolPtr->pool[i], gaPoolPtr->chroLen, arg);
+	}
+
+	// Order
 	cmp_method = (inverse > 0) ? high_then : less_then;
 	for(i = 0; i < gaPoolPtr->poolSize - 1; i++)
 	{
 		for(j = 0; j < (gaPoolPtr->poolSize - 1) - i; j++)
 		{
-			if(cmp_method(fitness(gaPoolPtr->pool[j], gaPoolPtr->chroLen, arg), fitness(gaPoolPtr->pool[j + 1], gaPoolPtr->chroLen, arg)))
+			if(cmp_method(fitList[j], fitList[j + 1]))
 			{
+				fitTmp = fitList[j];
+				fitList[j] = fitList[j + 1];
+				fitList[j + 1] = fitTmp;
+
 				tmp = gaPoolPtr->pool[j];
 				gaPoolPtr->pool[j] = gaPoolPtr->pool[j + 1];
 				gaPoolPtr->pool[j + 1] = tmp;
@@ -281,26 +413,15 @@ int ga_order(struct GA_POOL* gaPoolPtr, double (*fitness)(GA_TYPE* chro, int chr
 		}
 	}
 	
+RET:
+	if(fitList != NULL)
+	{
+		free(fitList);
+	}
+
 	LOG("Exit");
-	return 0;
+	return retValue;
 }
-
-//int ga_print_chro(struct GA_POOL* gaPoolPtr, int chroIndex)
-//{
-//	int i;
-//	
-//	// Checking
-//	if(chroIndex >= gaPoolPtr->poolSize)
-//		return -1;
-//	
-//	for(i = 0; i < gaPoolPtr->chroLen; i++)
-//	{
-//		printf("%d ", gaPoolPtr->pool[chroIndex][i]);
-//	}
-//
-//	return 0;
-//}
-
 
 int ga_insert(struct GA_POOL* gaPoolPtr, GA_TYPE* chro, int chroLen)
 {
