@@ -6,6 +6,56 @@
 #include "debug.h"
 #include "ga_private.h"
 
+int ga_remove(struct GA_POOL* gaPoolPtr, int chroIndex)
+{
+	int i;
+	int retValue = 0;
+	void* allocTmp = NULL;
+
+	// Checking
+	if(chroIndex >= gaPoolPtr->poolSize)
+	{
+		LOG("Index out of range");
+		retValue = -1;
+		goto RET;
+	}
+
+	// Free chromosome
+	if(gaPoolPtr->pool[chroIndex] != NULL)
+	{
+		free(gaPoolPtr->pool[chroIndex]);
+	}
+
+	// Move pointer list
+	for(i = chroIndex; i + 1 < gaPoolPtr->poolSize; i++)
+	{
+		gaPoolPtr->pool[i] = gaPoolPtr->pool[i + 1];
+	}
+
+	// Reallocate memroy
+	if(gaPoolPtr->poolSize - 1 > 0)
+	{
+		allocTmp = realloc(gaPoolPtr->pool, sizeof(GA_TYPE*) * (gaPoolPtr->poolSize - 1));
+		if(allocTmp == NULL)
+		{
+			retValue = -1;
+		}
+		else
+		{
+			gaPoolPtr->poolSize -= 1;
+		}
+	}
+	else
+	{
+		free(gaPoolPtr->pool);
+		gaPoolPtr->pool = NULL;
+		gaPoolPtr->poolSize = 0;
+	}
+
+RET:
+	return retValue;
+}
+
 int ga_kill_after(struct GA_POOL* gaPoolPtr, int killIndex)
 {
 	int i;

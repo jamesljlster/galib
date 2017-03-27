@@ -51,6 +51,15 @@ int ga_insert(struct GA_POOL* gaPoolPtr, GA_TYPE* chro, int chroLen);
  *	@return	If function execute succeed, function would return the target chromosome index in GA pool, else return -1.
  */
 
+int ga_remove(struct GA_POOL* gaPoolPtr, int chroIndex);
+/**
+ *	@fn		int ga_remove(struct GA_POOL* gaPoolPtr, int chroIndex);
+ *	@brief	Remove target chromosome from GA pool.
+ *	@param	gaPoolPtr:	GA data structure pointer.
+ *	@param	chroIndex:	Target index of chromosome which assigned to remove.
+ *	@return	If error, the function would return -1, else return 0.
+ */
+
 int ga_order(struct GA_POOL* gaPoolPtr, double (*fitness)(GA_TYPE* chro, int chroLen, void* arg), int inverse, void* arg);
 /**
  *	@fn		int ga_order(struct GA_POOL* gaPoolPtr, double (*fitness)(GA_TYPE* chro, int chroLen));
