@@ -86,7 +86,7 @@ int ga_remove(struct GA_POOL* gaPoolPtr, int chroIndex)
 	void* allocTmp = NULL;
 
 	// Checking
-	if(chroIndex >= gaPoolPtr->poolSize)
+	if(chroIndex >= gaPoolPtr->poolSize || chroIndex < 0)
 	{
 		LOG("Index out of range");
 		retValue = -1;
@@ -141,7 +141,7 @@ int ga_kill_after(struct GA_POOL* gaPoolPtr, int killIndex)
 	// Checking
 	LOG("killIndex: %d", killIndex);
 	LOG("GA pool has %d chromosome", gaPoolPtr->poolSize);
-	if(killIndex >= gaPoolPtr->poolSize)
+	if(killIndex >= gaPoolPtr->poolSize || killIndex < 0)
 	{
 		LOG("Index out of range");
 		retValue = -1;
@@ -185,7 +185,7 @@ int ga_edit_chro(struct GA_POOL* gaPoolPtr, int chroIndex, int position, GA_TYPE
 	LOG("chroIndex: %d, position: %d, newValue: %lf", chroIndex, position, newValue);
 
 	// Checking
-	if(chroIndex >= gaPoolPtr->poolSize || position >= gaPoolPtr->chroLen)
+	if(chroIndex >= gaPoolPtr->poolSize || chroIndex < 0 || position >= gaPoolPtr->chroLen || position < 0)
 		return -1;
 
 	gaPoolPtr->pool[chroIndex][position] = newValue;
@@ -204,7 +204,7 @@ int ga_reproduction(struct GA_POOL* gaPoolPtr, int chroIndex)
 	LOG("chroIndex: %d", chroIndex);
 
 	// Checking
-	if(chroIndex >= gaPoolPtr->poolSize)
+	if(chroIndex >= gaPoolPtr->poolSize || chroIndex < 0)
 	{
 		retValue = -1;
 		goto RET;
@@ -265,17 +265,17 @@ int ga_crossover(struct GA_POOL* gaPoolPtr, int chroIndex1, int chroIndex2, int 
 	LOG("Pool size: %d", gaPoolPtr->poolSize);
 	LOG("ChroLen: %d", gaPoolPtr->chroLen);
 
+	// Zero memory
+	LOG("Zero memory");
+	memset((void*)cross, 0, sizeof(GA_TYPE*) * 4);
+
 	// Checking
-	if(chroIndex1 >= gaPoolPtr->poolSize || chroIndex2 >= gaPoolPtr->poolSize || cut >= gaPoolPtr->chroLen)
+	if(chroIndex1 >= gaPoolPtr->poolSize || chroIndex1 < 0 || chroIndex2 >= gaPoolPtr->poolSize || chroIndex2 < 0 || cut >= gaPoolPtr->chroLen || cut < 0)
 	{
 		LOG("Checking failed");
 		retValue = -1;
 		goto RET;
 	}
-
-	// Zero memory
-	LOG("Zero memory");
-	memset((void*)cross, 0, sizeof(GA_TYPE*) * 4);
 
 	// Set parent
 	LOG("Set parent");
