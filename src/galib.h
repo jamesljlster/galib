@@ -1,3 +1,8 @@
+/**
+ *	@author	Zheng-Ling Lai <jamesljlster@gmail.com>
+ *	@file	galib.h
+**/
+
 #ifndef _GALIB_H_
 #define _GALIB_H_
 
