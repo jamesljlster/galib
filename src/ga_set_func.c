@@ -28,23 +28,23 @@ int ga_set_crossover(struct GA_POOL* gaPoolPtr, struct GA_SET gaSet, int chroInd
 
 	LOG("enter");
 
+	// Zero memory
+	memset(cross, 0, sizeof(GA_TYPE*) * 8);
+
 	// Checking
-	if(chroIndex1 >= gaPoolPtr->poolSize || chroIndex2 >= gaPoolPtr->poolSize)
+	if(chroIndex1 >= gaPoolPtr->poolSize || chroIndex1 < 0 || chroIndex2 >= gaPoolPtr->poolSize || chroIndex2 < 0)
 	{
 		LOG("chro index out of range");
 		retValue = -1;
 		goto RET;
 	}
 
-	if(cut + gaSet.startIndex >= gaPoolPtr->chroLen || gaSet.startIndex + gaSet.setLen > gaPoolPtr->chroLen)
+	if(cut + gaSet.startIndex >= gaPoolPtr->chroLen || gaSet.startIndex + gaSet.setLen > gaPoolPtr->chroLen || cut < 0)
 	{
 		LOG("ga set out of range");
 		retValue = -1;
 		goto RET;
 	}
-
-	// Zero memory
-	memset(cross, 0, sizeof(GA_TYPE*) * 8);
 
 	// Set parent
 	parent[0] = gaPoolPtr->pool[chroIndex1];
@@ -105,7 +105,7 @@ int ga_set_crossover(struct GA_POOL* gaPoolPtr, struct GA_SET gaSet, int chroInd
 	retValue = gaPoolPtr->poolSize - 8;
 
 RET:
-	for(i = 0; i < 4; i++)
+	for(i = 0; i < 8; i++)
 	{
 		if(cross[i] != NULL)
 			free(cross[i]);
