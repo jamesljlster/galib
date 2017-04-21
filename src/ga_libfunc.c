@@ -256,7 +256,7 @@ int ga_crossover(struct GA_POOL* gaPoolPtr, int chroIndex1, int chroIndex2, int 
 	int retValue = 0;
 
 	GA_TYPE* parent[2];
-	GA_TYPE* cross[4];
+	GA_TYPE* cross[GA_CROSS_OFFSPRING];
 
 	void* allocTmp = NULL;
 	
@@ -267,7 +267,7 @@ int ga_crossover(struct GA_POOL* gaPoolPtr, int chroIndex1, int chroIndex2, int 
 
 	// Zero memory
 	LOG("Zero memory");
-	memset((void*)cross, 0, sizeof(GA_TYPE*) * 4);
+	memset((void*)cross, 0, sizeof(GA_TYPE*) * GA_CROSS_OFFSPRING);
 
 	// Checking
 	if(chroIndex1 >= gaPoolPtr->poolSize || chroIndex1 < 0 || chroIndex2 >= gaPoolPtr->poolSize || chroIndex2 < 0 || cut >= gaPoolPtr->chroLen || cut < 0)
@@ -284,7 +284,7 @@ int ga_crossover(struct GA_POOL* gaPoolPtr, int chroIndex1, int chroIndex2, int 
 	
 	// Memory allocation
 	LOG("Memory allocation");
-	for(i = 0; i < 4; i++)
+	for(i = 0; i < GA_CROSS_OFFSPRING; i++)
 	{
 		cross[i] = (GA_TYPE*)malloc(sizeof(GA_TYPE) * gaPoolPtr->chroLen);
 		if(cross[i] == NULL)
@@ -295,7 +295,7 @@ int ga_crossover(struct GA_POOL* gaPoolPtr, int chroIndex1, int chroIndex2, int 
 	}
 	
 	LOG("Resize ga pool");
-	allocTmp = realloc(gaPoolPtr->pool, sizeof(GA_TYPE*) * (gaPoolPtr->poolSize + 4));
+	allocTmp = realloc(gaPoolPtr->pool, sizeof(GA_TYPE*) * (gaPoolPtr->poolSize + GA_CROSS_OFFSPRING));
 	if(allocTmp == NULL)
 	{
 		retValue = -1;
@@ -303,7 +303,7 @@ int ga_crossover(struct GA_POOL* gaPoolPtr, int chroIndex1, int chroIndex2, int 
 	}
 	else
 	{
-		gaPoolPtr->poolSize += 4;
+		gaPoolPtr->poolSize += GA_CROSS_OFFSPRING;
 		gaPoolPtr->pool = (GA_TYPE**)allocTmp;
 		allocTmp = NULL;
 	}
@@ -315,26 +315,29 @@ int ga_crossover(struct GA_POOL* gaPoolPtr, int chroIndex1, int chroIndex2, int 
 	{
 		for(j = 0; j < 2; j++)
 		{
-			ga_copy(cross[k], parent[i], 0, cut + 1);
-			ga_copy(cross[k], parent[j], cut + 1, gaPoolPtr->chroLen - cut - 1);
-			k++;
+			if(i != j)
+			{
+				ga_copy(cross[k], parent[i], 0, cut + 1);
+				ga_copy(cross[k], parent[j], cut + 1, gaPoolPtr->chroLen - cut - 1);
+				k++;
+			}
 		}
 	}
 
 	// Assign child
 	LOG("Assign child");
-	for(i = 0; i < 4; i++)
+	for(i = 0; i < GA_CROSS_OFFSPRING; i++)
 	{
 		gaPoolPtr->pool[gaPoolPtr->poolSize - 1 - i] = cross[i];
 		cross[i] = NULL;
 	}
 	
 	// Assign first child chromosome index
-	retValue = gaPoolPtr->poolSize - 4;
+	retValue = gaPoolPtr->poolSize - GA_CROSS_OFFSPRING;
 	LOG("Assign first child chromosome index: %d", retValue);
 
 RET:
-	for(i = 0; i < 4; i++)
+	for(i = 0; i < GA_CROSS_OFFSPRING; i++)
 	{
 		if(cross[i] != NULL)
 			free(cross[i]);

@@ -22,6 +22,8 @@ struct GA_SET
 	int setLen;
 };
 
+#define GA_CROSS_OFFSPRING	2
+
 #ifdef __cplusplus
 extern "C" {
 #endif
