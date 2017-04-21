@@ -99,7 +99,7 @@ int main(int argc, char* argv[])
 		}
 
 		// Reproduction
-		for(i = 0; i < 4; i++)
+		for(i = 0; i < GA_CROSS_OFFSPRING; i++)
 		{
 			iResult = ga_reproduction(&gaPool, i + crossIndex);
 			if(iResult < 0)
@@ -110,7 +110,7 @@ int main(int argc, char* argv[])
 		}
 
 		// Mutatuon
-		for(i = 0; i < 4; i++)
+		for(i = 0; i < GA_CROSS_OFFSPRING; i++)
 		{
 			for(j = 0; j < CHRO_LEN; j++)
 			{
