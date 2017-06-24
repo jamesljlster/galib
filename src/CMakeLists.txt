@@ -2,14 +2,29 @@ cmake_minimum_required(VERSION 2.8)
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall")
 set(CMAKE_C_FLAGS_RELEASE "-O3")
+set(GA_TYPE "double" CACHE STRING "GA variable type")
+set(GA_PREFIX "ga" CACHE STRING "GA function prefix")
 
-# Check if GA_TYPE is set or not
+# Check if required information is set or not
 if(NOT GA_TYPE)
 	message("GA_TYPE is not set!")
 endif()
 
-# Generate public header
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/galib.h.in ${CMAKE_CURRENT_SOURCE_DIR}/galib.h)
+if(NOT GA_PREFIX)
+	message("GA function prefix is not set")
+endif()
+
+# Generate files with cmake setting
+file(GLOB PROJECT_CFG_IN ${CMAKE_CURRENT_SOURCE_DIR}/*.in)
+foreach(CFG_IN_PATH ${PROJECT_CFG_IN})
+	# Get each file name
+	get_filename_component(CFG_IN_FILENAME ${CFG_IN_PATH} NAME)
+	STRING(REGEX REPLACE "\\.[^.]*$" "" CFG_IN_NAME ${CFG_IN_FILENAME})
+
+	# Configure files
+	configure_file(${CFG_IN_FILENAME} ${CMAKE_CURRENT_SOURCE_DIR}/${CFG_IN_NAME})
+
+endforeach()
 
 # Variables
 set(PROJECT_NAME galib)

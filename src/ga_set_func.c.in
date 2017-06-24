@@ -5,7 +5,7 @@
 #include "ga_private.h"
 #include "debug.h"
 
-struct GA_SET ga_set_init(int startIndex, int setLen)
+struct GA_SET ${GA_PREFIX}_set_init(int startIndex, int setLen)
 {
 	struct GA_SET tmpSet;
 
@@ -15,7 +15,7 @@ struct GA_SET ga_set_init(int startIndex, int setLen)
 	return tmpSet;
 }
 
-int ga_set_crossover(struct GA_POOL* gaPoolPtr, struct GA_SET gaSet, int chroIndex1, int chroIndex2, int cut)
+int ${GA_PREFIX}_set_crossover(struct GA_POOL* gaPoolPtr, struct GA_SET gaSet, int chroIndex1, int chroIndex2, int cut)
 {
 	int i, j, k;
 	int retValue = 0;

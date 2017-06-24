@@ -6,7 +6,7 @@
 #include "debug.h"
 #include "ga_private.h"
 
-int ga_remove_same_chro(struct GA_POOL* gaPoolPtr)
+int ${GA_PREFIX}_remove_same_chro(struct GA_POOL* gaPoolPtr)
 {
 	int i, j;
 	int iResult;
@@ -79,7 +79,7 @@ RET:
 	return retValue;
 }
 
-int ga_remove(struct GA_POOL* gaPoolPtr, int chroIndex)
+int ${GA_PREFIX}_remove(struct GA_POOL* gaPoolPtr, int chroIndex)
 {
 	int i;
 	int retValue = 0;
@@ -130,7 +130,7 @@ RET:
 	return retValue;
 }
 
-int ga_kill_after(struct GA_POOL* gaPoolPtr, int killIndex)
+int ${GA_PREFIX}_kill_after(struct GA_POOL* gaPoolPtr, int killIndex)
 {
 	int i;
 	int retValue = 0;
@@ -179,7 +179,7 @@ RET:
 	return retValue;
 }
 
-int ga_edit_chro(struct GA_POOL* gaPoolPtr, int chroIndex, int position, GA_TYPE newValue)
+int ${GA_PREFIX}_edit_chro(struct GA_POOL* gaPoolPtr, int chroIndex, int position, GA_TYPE newValue)
 {
 	LOG("Enter");
 	LOG("chroIndex: %d, position: %d, newValue: %lf", chroIndex, position, newValue);
@@ -194,7 +194,7 @@ int ga_edit_chro(struct GA_POOL* gaPoolPtr, int chroIndex, int position, GA_TYPE
 	return 0;
 }
 
-int ga_reproduction(struct GA_POOL* gaPoolPtr, int chroIndex)
+int ${GA_PREFIX}_reproduction(struct GA_POOL* gaPoolPtr, int chroIndex)
 {
 	int retValue = 0;
 	GA_TYPE* tmpChro = NULL;
@@ -250,7 +250,7 @@ RET:
 	return retValue;
 }
 
-int ga_crossover(struct GA_POOL* gaPoolPtr, int chroIndex1, int chroIndex2, int cut)
+int ${GA_PREFIX}_crossover(struct GA_POOL* gaPoolPtr, int chroIndex1, int chroIndex2, int cut)
 {
 	int i, j, k;
 	int retValue = 0;
@@ -350,7 +350,7 @@ RET:
 	return retValue;
 }
 
-void ga_copy(GA_TYPE* dst, GA_TYPE* src, int startIndex, int size)
+void ${GA_PREFIX}_copy(GA_TYPE* dst, GA_TYPE* src, int startIndex, int size)
 {
 	int i;
 	
@@ -362,17 +362,17 @@ void ga_copy(GA_TYPE* dst, GA_TYPE* src, int startIndex, int size)
 	LOG("Exit");
 }
 
-int less_then(double a, double b)
+int ${GA_PREFIX}_less_then(double a, double b)
 {
 	return a < b;
 }
 
-int high_then(double a, double b)
+int ${GA_PREFIX}_high_then(double a, double b)
 {
 	return a > b;
 }
 
-int ga_order(struct GA_POOL* gaPoolPtr, double (*fitness)(GA_TYPE* chro, int chroLen, void* arg), int inverse, void* arg)
+int ${GA_PREFIX}_order(struct GA_POOL* gaPoolPtr, double (*fitness)(GA_TYPE* chro, int chroLen, void* arg), int inverse, void* arg)
 {
 	int i, j;
 	int retValue = 0;
@@ -398,7 +398,7 @@ int ga_order(struct GA_POOL* gaPoolPtr, double (*fitness)(GA_TYPE* chro, int chr
 	}
 
 	// Order
-	cmp_method = (inverse > 0) ? high_then : less_then;
+	cmp_method = (inverse > 0) ? ${GA_PREFIX}_high_then : ${GA_PREFIX}_less_then;
 	for(i = 0; i < gaPoolPtr->poolSize - 1; i++)
 	{
 		for(j = 0; j < (gaPoolPtr->poolSize - 1) - i; j++)
@@ -426,7 +426,7 @@ RET:
 	return retValue;
 }
 
-int ga_insert(struct GA_POOL* gaPoolPtr, GA_TYPE* chro, int chroLen)
+int ${GA_PREFIX}_insert(struct GA_POOL* gaPoolPtr, GA_TYPE* chro, int chroLen)
 {
 	int i;
 	int retValue = 0;
@@ -485,7 +485,7 @@ RET:
 	return retValue;
 }
 
-int ga_create(struct GA_POOL* gaPoolPtr, int chroLen)
+int ${GA_PREFIX}_create(struct GA_POOL* gaPoolPtr, int chroLen)
 {
 	LOG("Enter");
 
@@ -497,7 +497,7 @@ int ga_create(struct GA_POOL* gaPoolPtr, int chroLen)
 	return 0;
 }
 
-int ga_delete(struct GA_POOL* gaPoolPtr)
+int ${GA_PREFIX}_delete(struct GA_POOL* gaPoolPtr)
 {
 	int i;
 	

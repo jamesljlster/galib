@@ -4,5 +4,6 @@ build
 # Temp file
 *.swp
 
-# Generated public header
-galib.h
+# Generated files
+src/*.h
+src/*.c
