@@ -6,7 +6,7 @@
 #ifndef _GALIB_H_
 #define _GALIB_H_
 
-typedef double GA_TYPE;
+typedef ${GA_TYPE} GA_TYPE;
 
 struct GA_POOL
 {

@@ -3,6 +3,14 @@ cmake_minimum_required(VERSION 2.8)
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall")
 set(CMAKE_C_FLAGS_RELEASE "-O3")
 
+# Check if GA_TYPE is set or not
+if(NOT GA_TYPE)
+	message("GA_TYPE is not set!")
+endif()
+
+# Generate public header
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/galib.h.in ${CMAKE_CURRENT_SOURCE_DIR}/galib.h)
+
 # Variables
 set(PROJECT_NAME galib)
 set(CMAKE_CONFIGURATION_TYPES "Debug;Release" CACHE STRING "Build confugure" FORCE)

@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 2.8)
 
 # Environment variables
+set(GA_TYPE "double" CACHE PATH "GA variable type")
 set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/install" CACHE PATH "Installation directory")
 set(BUILD_TEST OFF CACHE BOOL "Enable building test")
 
